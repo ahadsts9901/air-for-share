@@ -1,7 +1,6 @@
-const App = () => {
-  return (
-    <div>App</div>
-  )
-}
+import "./App.css"
+import Main from "./components/Main"
+
+const App = () => <Main />
 
 export default App
