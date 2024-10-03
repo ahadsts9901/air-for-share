@@ -7,13 +7,13 @@ const Footer = () => {
         <>
             <div className="footer">
                 <p>2024 - {new Date().getFullYear()} github.com/ahadsts9901</p>
-                <p>Made by <a href={githubUrl}>Muhammad Ahad</a> with ❤️</p>
+                <p>Made by <a target="_blank" href={githubUrl}>Muhammad Ahad</a> with ❤️</p>
                 <div className="social-links">
-                    <a href={facebookUrl}><FaFacebook /></a>
-                    <a href={linkedinUrl}><FaLinkedinIn /></a>
-                    <a href={whatsappUrl}><FaWhatsapp /></a>
-                    <a href={youtubeUrl}><FaYoutube /></a>
-                    <a href={githubUrl}><FaGithub /></a>
+                    <a target="_blank" href={facebookUrl}><FaFacebook /></a>
+                    <a target="_blank" href={linkedinUrl}><FaLinkedinIn /></a>
+                    <a target="_blank" href={whatsappUrl}><FaWhatsapp /></a>
+                    <a target="_blank" href={youtubeUrl}><FaYoutube /></a>
+                    <a target="_blank" href={githubUrl}><FaGithub /></a>
                 </div>
             </div>
         </>

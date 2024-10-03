@@ -2,11 +2,13 @@ $bodyColor: #F4F4F4;
 
 .body {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: $bodyColor;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 2em;
+    gap: 1em;
+    overflow-y: auto;
+    overflow-x: hidden;
 }

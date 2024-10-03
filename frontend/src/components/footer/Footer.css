@@ -5,6 +5,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: 0.3em;
+  margin-top: 2em;
 }
 .footer p {
   width: 100%;
@@ -23,7 +24,7 @@
   justify-content: center;
   align-items: center;
   gap: 3em;
-  margin-top: 30px;
+  margin: 30px 0;
 }
 .footer .social-links a {
   color: #A09B9B;
