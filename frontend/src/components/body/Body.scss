@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 $white: #ffffff;
 $bodyColor: #f8f8f8;
 $black: #454545;
 $textColor: #A09B9B;
 $purpleText: #745DFF;
+$blueText: #537EFF;
 
 .air-body {
     width: calc(100vw - 300px);
@@ -27,6 +30,7 @@ $purpleText: #745DFF;
             justify-content: center;
             align-items: center;
             padding: 2em 1.5em;
+            transition: background-color ease-in-out 0.1s;
 
             &:hover {
                 background-color: $white;
@@ -53,5 +57,80 @@ $purpleText: #745DFF;
 
     }
 
-    ._main {}
+    ._main {
+        width: 100%;
+        height: 100%;
+        background-color: $white;
+
+        .text-section {
+            width: 100%;
+            height: 100%;
+            background-color: $white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 40px;
+            gap: 20px;
+
+            h3 {
+                width: 100%;
+                text-align: left;
+                font-size: 2em;
+                font-weight: normal;
+                color: $black;
+            }
+
+            textarea {
+                width: 100%;
+                height: 100%;
+                resize: none;
+                border: 0;
+                font-size: 1.3em;
+
+                &::placeholder {
+                    color: $textColor;
+                    font-weight: 300;
+                }
+            }
+
+            .buttons-cont {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 40px;
+
+                button {
+                    all: unset;
+                    padding: 0.5em 3em;
+                    cursor: pointer;
+                    color: $black;
+                }
+
+                .saveButton {
+                    border: 3px solid $black;
+                    font-family: "Open Sans", sans-serif;
+                    font-weight: bolder;
+                    font-style: italic;
+                    font-size: 1.5em;
+
+                    &:hover {
+                        color: $purpleText;
+                        border-color: $purpleText;
+                    }
+
+                    &:active {
+                        color: $white;
+                        border-color: $white;
+                        background: $blueText;
+                        background: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
+                    }
+                }
+
+            }
+
+        }
+
+    }
 }
