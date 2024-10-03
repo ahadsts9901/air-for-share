@@ -46,7 +46,7 @@
   height: 100%;
   background-color: #ffffff;
 }
-.air-body ._main .text-section {
+.air-body ._main .section {
   width: 100%;
   height: 100%;
   background-color: #ffffff;
@@ -57,55 +57,79 @@
   padding: 40px;
   gap: 20px;
 }
-.air-body ._main .text-section h3 {
+.air-body ._main .section h3 {
   width: 100%;
   text-align: left;
   font-size: 2em;
   font-weight: normal;
   color: #454545;
 }
-.air-body ._main .text-section textarea {
+.air-body ._main .section textarea {
   width: 100%;
   height: 100%;
   resize: none;
   border: 0;
   font-size: 1.3em;
 }
-.air-body ._main .text-section textarea::-moz-placeholder {
+.air-body ._main .section textarea::-moz-placeholder {
   color: #A09B9B;
   font-weight: 300;
 }
-.air-body ._main .text-section textarea::placeholder {
+.air-body ._main .section textarea::placeholder {
   color: #A09B9B;
   font-weight: 300;
 }
-.air-body ._main .text-section .buttons-cont {
+.air-body ._main .section .buttons-cont {
   width: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 40px;
 }
-.air-body ._main .text-section .buttons-cont button {
+.air-body ._main .section .buttons-cont button {
   all: unset;
   padding: 0.5em 3em;
   cursor: pointer;
   color: #454545;
 }
-.air-body ._main .text-section .buttons-cont .saveButton {
+.air-body ._main .section .buttons-cont .saveButton {
   border: 3px solid #454545;
   font-family: "Open Sans", sans-serif;
   font-weight: bolder;
   font-style: italic;
   font-size: 1.5em;
 }
-.air-body ._main .text-section .buttons-cont .saveButton:hover {
+.air-body ._main .section .buttons-cont .saveButton:hover {
   color: #745DFF;
   border-color: #745DFF;
 }
-.air-body ._main .text-section .buttons-cont .saveButton:active {
+.air-body ._main .section .buttons-cont .saveButton:active {
   color: #ffffff;
   border-color: #ffffff;
   background: #537EFF;
   background: linear-gradient(0deg, #537EFF 25%, #745DFF 75%);
+}
+.air-body ._main .section .files-cont {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #eee;
+}
+.air-body ._main .section .files-cont .fileInstructions {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+.air-body ._main .section .files-cont .fileInstructions p {
+  color: #A09B9B;
+  font-weight: 300;
+}
+.air-body ._main .section .files-cont .fileInstructions p label {
+  color: #745DFF;
+  cursor: pointer;
+}
+.air-body ._main .section .files-cont .fileInstructions.dragging {
+  background-color: #f8f8f8;
 }/*# sourceMappingURL=Body.css.map */

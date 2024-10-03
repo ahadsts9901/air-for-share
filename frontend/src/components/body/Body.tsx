@@ -39,6 +39,8 @@ export const TextSection = () => {
     const [text, set_text] = useState("")
     const [button_content, set_button_content] = useState("Save")
 
+    console.log(text, set_button_content)
+
     const clear = () => {
         console.log("clear");
     }
@@ -61,11 +63,71 @@ export const TextSection = () => {
     )
 }
 
-export const FileSection = () => {
+export const FileInstructions = ({ set_files }: any) => {
+
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleDragEnter = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            set_files(files);
+        }
+    };
+
     return (
         <>
-            <div className="text-section section">
+            <div
+                className={`fileInstructions ${isDragging ? "dragging" : ""}`}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+            >
+                <input
+                    type="file"
+                    id="files-sts"
+                    hidden
+                    multiple
+                    onChange={(e: any) => set_files(e?.target?.files)}
+                />
+                <p>Drag and drop any files, or <label htmlFor="files-sts">Browse</label></p>
+            </div>
+        </>
+    )
+}
+
+export const FileSection = () => {
+
+    const [files, set_files] = useState<any>(null)
+
+    return (
+        <>
+            <div className="file-section section">
                 <h3>File</h3>
+                <div className="files-cont">
+                    <FileInstructions files={files} set_files={set_files} />
+                </div>
             </div>
         </>
     )
