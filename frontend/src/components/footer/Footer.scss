@@ -33,7 +33,7 @@ $black: #343434;
 
         a {
             color: $textColor;
-            animation: color ease-in-out 1s;
+            transition: color ease-in-out 0.15s;
             font-size: 1.5em;
 
             &:hover {

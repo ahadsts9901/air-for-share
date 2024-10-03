@@ -27,7 +27,7 @@
 }
 .footer .social-links a {
   color: #A09B9B;
-  animation: color ease-in-out 1s;
+  transition: color ease-in-out 0.15s;
   font-size: 1.5em;
 }
 .footer .social-links a:hover {

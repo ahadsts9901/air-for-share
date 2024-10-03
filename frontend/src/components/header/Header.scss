@@ -1,3 +1,8 @@
+$textColor: #A09B9B;
+$purpleText: #745DFF;
+$blueText: #537EFF;
+$black: #343434;
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -10,6 +15,36 @@
         height: 110px;
         object-fit: contain;
         object-position: center;
+        cursor: pointer;
+    }
+
+    ul {
+        padding: 0;
+
+        li {
+            list-style-type: none;
+            display: inline-block;
+            padding: 0.7em;
+            margin: 0 1em;
+            cursor: pointer;
+            color: $black;
+            font-size: 0.9em;
+            transition: color ease-in-out 0.15s;
+
+            &:hover {
+                color: $purpleText;
+            }
+        }
+
+        .login-register {
+            font-weight: bold;
+            color: $blueText;
+            transition: color ease-in-out 0.15s;
+
+            &:hover {
+                color: $purpleText;
+            }
+        }
     }
 
 }
