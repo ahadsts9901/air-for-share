@@ -1,1 +1,45 @@
-.footer {}
+$textColor: #A09B9B;
+$purpleText: #745DFF;
+$black: #343434;
+
+.footer {
+    width: calc(100vw - 300px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.3em;
+
+    p {
+        width: 100%;
+        text-align: center;
+        color: $textColor;
+        font-weight: 300;
+        font-size: 0.9em;
+
+        a {
+            text-decoration: none;
+            color: $purpleText;
+        }
+    }
+
+    .social-links {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 3em;
+        margin-top: 30px;
+
+        a {
+            color: $textColor;
+            animation: color ease-in-out 1s;
+            font-size: 1.5em;
+
+            &:hover {
+                color: $black;
+            }
+        }
+    }
+
+}
