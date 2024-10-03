@@ -1,7 +1,7 @@
-import { Route } from "express";
+import { Router } from "express";
 import { getFilesController } from "../controllers/sharingControllers.mjs";
 
-const router = Route()
+const router = Router()
 
 router.get("/files", getFilesController)
 
