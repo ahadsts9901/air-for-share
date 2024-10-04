@@ -52,6 +52,16 @@ export const sendTextController = async (req, res, next) => {
     }
 
     try {
+
+        const deleteTextResp = await sharingModel.deleteMany({
+            isText: true,
+            location: {
+                $geoWithin: {
+                    $centerSphere: [[longitude, latitude], 100 / 6378.1]
+                }
+            }
+        })
+
         const payload = {
             isText: true,
             textData: { text: text },
@@ -70,7 +80,7 @@ export const sendTextController = async (req, res, next) => {
 
     } catch (error) {
         console.error(error)
-        res.status(500).send({
+        return res.status(500).send({
             message: errorMessages?.serverError,
             error: error?.message
         })
@@ -109,14 +119,14 @@ export const getTextController = async (req, res, next) => {
             });
         }
 
-        res.send({
+        return res.send({
             message: errorMessages?.textFetched,
             data: nearbyText
         });
 
     } catch (error) {
         console.error(error);
-        res.status(500).send({
+        return res.status(500).send({
             message: errorMessages?.serverError,
             error: error?.message
         });
@@ -124,6 +134,45 @@ export const getTextController = async (req, res, next) => {
 
 }
 
+export const removeTextController = async (req, res, next) => {
+
+    const { latitude, longitude } = req?.query;
+
+    if (!latitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLatitude
+        });
+    }
+
+    if (!longitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLongitude
+        });
+    }
+
+    try {
+
+        const deleteTextResp = await sharingModel.deleteMany({
+            isText: true,
+            location: {
+                $geoWithin: {
+                    $centerSphere: [[+longitude, +latitude], 100 / 6378.1]
+                }
+            }
+        })
+
+        return res.send({
+            message: errorMessages?.textCleared,
+        });
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send({
+            message: errorMessages?.serverError,
+            error: error?.message
+        })
+    }
+}
 export const _ = async (req, res, next) => {
     try {
 

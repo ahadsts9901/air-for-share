@@ -47,8 +47,11 @@ export const TextSection = ({ location }: any) => {
     console.log("data", data)
 
     useEffect(() => {
-        if (!text || text?.trim() === "" || is_typed) {
+
+        if ((!text || text?.trim() === "") && is_typed) {
             removeText()
+        } else if (!text || text?.trim() === "" || is_typed) {
+            set_button_content("Save")
         } else {
             set_button_content("Copy")
         }
@@ -114,8 +117,13 @@ export const TextSection = ({ location }: any) => {
     }
 
     const removeText = async () => {
+        if (!location) return
+        if (!location?.latitude) return
+        if (!location?.longitude) return
+
         try {
-            set_button_content("Save")
+            const resp = await axios.delete(`${baseUrl}/api/v1/text?latitude=${location?.latitude}&longitude=${location?.longitude}`, { withCredentials: true })
+            console.log(resp)
         } catch (error) {
             console.error(error)
         }
