@@ -196,6 +196,35 @@ export const FileInstructions = ({ set_files }: any) => {
     )
 }
 
+export const FilesCont = ({ location, files, set_files }: any) => {
+
+    const [data_files, set_data_files] = useState<any[]>([])
+
+    useEffect(() => {
+        getFiles()
+    }, [])
+
+    const getFiles = async () => {
+        if (!location) return
+        if (!location?.latitude) return
+        if (!location?.longitude) return
+
+        try {
+            const resp = await axios.get(`${baseUrl}/api/v1/files?latitude=${location?.latitude}&longitude=${location?.longitude}`, {
+                withCredentials: true
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    return (
+        <>
+            <div className="files-container">files-cont</div>
+        </>
+    )
+}
+
 export const FileSection = ({ location }: any) => {
 
     const [files, set_files] = useState<any>(null)
@@ -205,7 +234,7 @@ export const FileSection = ({ location }: any) => {
             <div className="file-section section">
                 <h3>File</h3>
                 <div className="files-cont">
-                    <FileInstructions files={files} set_files={set_files} />
+                    {files?.length ? <FilesCont files={files} set_files={set_files} location={location} /> : <FileInstructions files={files} set_files={set_files} />}
                 </div>
             </div>
         </>

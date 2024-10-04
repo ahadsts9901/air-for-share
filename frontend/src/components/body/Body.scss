@@ -160,6 +160,15 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
                     background-color: $bodyColor;
                 }
 
+                .files-container {
+                    padding: 20px;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    gap: 20px;
+                    background-color: $white;
+                }
+
             }
 
         }

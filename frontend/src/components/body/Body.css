@@ -132,4 +132,12 @@
 }
 .air-body ._main .section .files-cont .fileInstructions.dragging {
   background-color: #f8f8f8;
+}
+.air-body ._main .section .files-cont .files-container {
+  padding: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: #ffffff;
 }/*# sourceMappingURL=Body.css.map */

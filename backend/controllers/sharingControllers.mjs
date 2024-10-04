@@ -1,23 +1,9 @@
+import { isValidObjectId } from "mongoose"
 import { sharingModel } from "../models/sharingModel.mjs"
 import { errorMessages } from "../utils/errorMessages.mjs"
 
+// text controllers
 export const sendTextController = async (req, res, next) => {
-
-    // {
-    //     isText: "boolean",
-    //         textData: {
-    //         text: "string"
-    //     },
-    //     fileData: {
-    //         filePath: "string",
-    //             filename: "string",
-    //                 fileSize: "number"
-    //     },
-    //     location: {
-    //         latitude: "number",
-    //             longitude: "number"
-    //     }
-    // }
 
     const { text, latitude, longitude } = req?.body
 
@@ -173,12 +159,189 @@ export const removeTextController = async (req, res, next) => {
         })
     }
 }
-export const _ = async (req, res, next) => {
+
+// file controllers
+export const sendFilesController = async (req, res, next) => {
+
+    // {
+    //     isText: "boolean",
+    //         textData: {
+    //         text: "string"
+    //     },
+    //     fileData: {
+    //         filePath: "string",
+    //             filename: "string",
+    //                 fileSize: "number"
+    //     },
+    //     location: {
+    //         latitude: "number",
+    //             longitude: "number"
+    //     }
+    // }
+
+    const { latitude, longitude } = req?.body
+    const { files } = req
+
+    if (!files || !files?.length || !files[0]) {
+        return res.status(400).send({
+            message: errorMessages?.filesReqiured
+        })
+    }
+
+    if (!latitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLatitude
+        })
+    }
+
+    if (isNaN(latitude)) {
+        return res.status(400).send({
+            message: errorMessages?.invalidLatitude
+        })
+    }
+
+    if (!longitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLongitude
+        })
+    }
+
+    if (isNaN(longitude)) {
+        return res.status(400).send({
+            message: errorMessages?.invalidLongitude
+        })
+    }
+
     try {
+
+        // const payload = {
+        //     isText: false,
+        //     textData: { text: null },
+        //     fileData: { filePath: null, filename: null, fileSize: null },
+        //     location: {
+        //         type: "Point",
+        //         coordinates: [parseFloat(longitude), parseFloat(latitude)],
+        //     },
+        // };
+
+        // const resp = await sharingModel.create(payload)
+
+        return res.send({
+            message: errorMessages?.fileSaved
+        })
 
     } catch (error) {
         console.error(error)
-        res.status(500).send({
+        return res.status(500).send({
+            message: errorMessages?.serverError,
+            error: error?.message
+        })
+    }
+}
+
+export const getFilesController = async (req, res, next) => {
+
+    const { latitude, longitude } = req?.query;
+
+    if (!latitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLatitude
+        });
+    }
+
+    if (!longitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLongitude
+        });
+    }
+
+    try {
+        const nearbyFiles = await sharingModel.find({
+            isText: false,
+            location: {
+                $geoWithin: {
+                    $centerSphere: [[+longitude, +latitude], 100 / 6378.1]
+                }
+            }
+        })
+
+        if (!nearbyFiles) {
+            return res.status(404).send({
+                message: errorMessages?.noNearbyFiles
+            });
+        }
+
+        return res.send({
+            message: errorMessages?.filesFetched,
+            data: nearbyFiles
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({
+            message: errorMessages?.serverError,
+            error: error?.message
+        });
+    }
+
+}
+
+export const removeFileController = async (req, res, next) => {
+
+    const { latitude, longitude } = req?.query;
+    const { docId } = req?.params
+
+    if (!latitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLatitude
+        });
+    }
+
+    if (!longitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLongitude
+        });
+    }
+
+    if (!docId || docId?.trim() === "") {
+        return res.status(400).send({
+            message: errorMessages?.idIsReqiured
+        });
+    }
+
+    if (!isValidObjectId(docId)) {
+        return res.status(400).send({
+            message: errorMessages?.idInvalid
+        });
+    }
+
+    try {
+
+        const doc = await sharingModel.findOne({
+            _id: docId,
+            isText: true,
+            location: {
+                $geoWithin: {
+                    $centerSphere: [[+longitude, +latitude], 100 / 6378.1]
+                }
+            }
+        })
+
+        if (!doc) {
+            return res.status(401).send({
+                message: errorMessages?.unAuthError
+            })
+        }
+
+        const deleteResp = await sharingModel.findByIdAndDelete(docId)
+
+        return res.send({
+            message: errorMessages?.filesCleared,
+        });
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send({
             message: errorMessages?.serverError,
             error: error?.message
         })

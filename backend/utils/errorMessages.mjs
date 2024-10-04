@@ -11,10 +11,14 @@ export const errorMessages = {
     noFilesProvided: "files not provided",
     emptyTextError: "text can't be empty",
     textSaved: 'text saved successfully',
-    fileSaved: 'file saved successfully',
+    fileSaved: 'files saved successfully',
     textCleared: "text cleared successfully",
-    filesCleared: "all files have cleared successfully",
+    filesCleared: "file cleared successfully",
     textFetched: "text fetched",
     filesFetched: "files fetched",
-    noNearbyText: "no nearby text"
+    noNearbyText: "no nearby text",
+    noNearbyFiles: "no nearby files",
+    filesReqiured: "files are reqiured",
+    idIsReqiured: "id is required",
+    idInvalid: "id is invalid",
 }
