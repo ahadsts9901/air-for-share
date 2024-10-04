@@ -8,7 +8,6 @@ let sharingSchema = new Schema({
     textData: {
         text: {
             type: String,
-            required: true,
             minlength: 1,
             default: null
         }
@@ -16,17 +15,14 @@ let sharingSchema = new Schema({
     fileData: {
         filePath: {
             type: String,
-            required: true,
             default: null
         },
         filename: {
             type: String,
-            required: true,
             default: null
         },
         fileSize: {
             type: Number,
-            required: true,
             default: null
         }
     },

@@ -1,7 +1,9 @@
+import axios from "axios";
 import "./Body.css";
 import { useEffect, useState } from "react";
 import { BsTextLeft } from "react-icons/bs";
 import { RxFileText } from "react-icons/rx";
+import { baseUrl } from "../../utils/core";
 
 export const Sidebar = ({ isText, setIsText }: any) => {
 
@@ -38,22 +40,51 @@ export const TextSection = ({ location }: any) => {
 
     const [text, set_text] = useState("")
     const [button_content, set_button_content] = useState("Save")
+    const [is_typed, set_is_typed] = useState(false)
 
-    console.log(text, set_button_content)
+    useEffect(() => {
+        if (!text || text?.trim() === "" || is_typed) {
+            set_button_content("Save")
+        } else {
+            set_button_content("Copy")
+        }
+    }, [text])
 
     const clear = () => {
         console.log("clear");
     }
 
     const handleClick = () => {
-        console.log("handle click")
+        if (button_content === "Save") saveText()
+    }
+
+    const saveText = async () => {
+        if (!text || text?.trim() === "") return
+        if (!location) return
+        if (!location?.latitude) return
+        if (!location?.longitude) return
+
+        try {
+            await axios.post(`${baseUrl}/api/v1/text`, {
+                text: text,
+                latitude: location?.latitude,
+                longitude: location?.longitude,
+            }, { withCredentials: true })
+            set_button_content("Copy")
+            set_is_typed(false)
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
         <>
             <div className="text-section section">
                 <h3>Text</h3>
-                <textarea placeholder="Type something..." onChange={(e: any) => set_text(e?.target?.value)}></textarea>
+                <textarea placeholder="Type something..." value={text} onChange={(e: any) => {
+                    set_text(e?.target?.value)
+                    set_is_typed(true)
+                }}></textarea>
                 <div className="buttons-cont">
                     <button className="clearButton" onClick={clear}>Clear</button>
                     <button className="saveButton" onClick={handleClick}>{button_content}</button>
@@ -120,6 +151,7 @@ export const FileInstructions = ({ set_files }: any) => {
 export const FileSection = ({ location }: any) => {
 
     const [files, set_files] = useState<any>(null)
+    console.log(location)
 
     return (
         <>

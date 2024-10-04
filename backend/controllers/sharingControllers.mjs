@@ -56,7 +56,8 @@ export const sendTextController = async (req, res, next) => {
         const payload = {
             isText: true,
             textData: { text: text },
-            location: { latitude: latitude, longitude: longitude }
+            fileData: { filePath: null, filename: null, fileSize: null },
+            location: { latitude: latitude, longitude: longitude },
         }
 
         const resp = await sharingModel.create(payload)
