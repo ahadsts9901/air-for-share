@@ -16,4 +16,5 @@ export const errorMessages = {
     filesCleared: "all files have cleared successfully",
     textFetched: "text fetched",
     filesFetched: "files fetched",
+    noNearbyText: "no nearby text"
 }

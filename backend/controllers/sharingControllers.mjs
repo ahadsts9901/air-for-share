@@ -52,13 +52,15 @@ export const sendTextController = async (req, res, next) => {
     }
 
     try {
-
         const payload = {
             isText: true,
             textData: { text: text },
             fileData: { filePath: null, filename: null, fileSize: null },
-            location: { latitude: latitude, longitude: longitude },
-        }
+            location: {
+                type: "Point",
+                coordinates: [parseFloat(longitude), parseFloat(latitude)],
+            },
+        };
 
         const resp = await sharingModel.create(payload)
 
@@ -73,6 +75,53 @@ export const sendTextController = async (req, res, next) => {
             error: error?.message
         })
     }
+}
+
+export const getTextController = async (req, res, next) => {
+
+    const { latitude, longitude } = req?.query;
+
+    if (!latitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLatitude
+        });
+    }
+
+    if (!longitude) {
+        return res.status(400).send({
+            message: errorMessages?.noLongitude
+        });
+    }
+
+    try {
+        const nearbyText = await sharingModel.findOne({
+            isText: true,
+            location: {
+                $geoWithin: {
+                    $centerSphere: [[longitude, latitude], 100 / 6378.1]
+                }
+            }
+        }).sort({ _id: -1 })
+
+        if (!nearbyText) {
+            return res.status(404).send({
+                message: errorMessages?.noNearbyText
+            });
+        }
+
+        res.send({
+            message: errorMessages?.textFetched,
+            data: nearbyText
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({
+            message: errorMessages?.serverError,
+            error: error?.message
+        });
+    }
+
 }
 
 export const _ = async (req, res, next) => {

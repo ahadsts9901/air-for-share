@@ -28,16 +28,14 @@ let sharingSchema = new Schema({
     },
     location: {
         type: {
-            latitude: {
-                type: Number,
-                required: true
-            },
-            longitude: {
-                type: Number,
-                required: true
-            }
+            type: String,
+            enum: ['Point'],
+            required: true
         },
-        required: true
+        coordinates: {
+            type: [Number],
+            required: true
+        }
     },
     createdOn: {
         type: Date,
@@ -45,6 +43,7 @@ let sharingSchema = new Schema({
     }
 });
 
+sharingSchema.index({ location: '2dsphere' });
 let sharingModel;
 
 try {
