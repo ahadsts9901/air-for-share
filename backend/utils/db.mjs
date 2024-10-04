@@ -5,42 +5,30 @@ const uri = process.env.MONGO_URI
 
 async function run() {
     try {
-
-        await mongoose.connect(
-            uri,
-            {
-                dbName: 'air-for-share',
-            }
-        );
-
-    } catch (err) {
-        console.log("mongodb connection error", err);
+        await mongoose.connect(uri, { dbName: 'air-for-share' })
+    } catch (error) {
+        console.error(error)
         process.exit(1);
     }
 }
 
 run().catch(console.dir);
 
-mongoose.connection.on('connected', function () {
-    console.log("mongoose is connected");
-});
+mongoose.connection.on('connected', () => console.log("mongoose is connected"));
 
-mongoose.connection.on('disconnected', function () {
+mongoose.connection.on('disconnected', () => {
     console.log("mongoose is disconnected");
     process.exit(1);
 });
 
-mongoose.connection.on('error', function (err) {
+mongoose.connection.on('error', (err) => {
     console.log('mongoose connection error: ', err);
     process.exit(1);
 });
 
-process.on('SIGINT', async function () {
-
+process.on('SIGINT', async () => {
     console.log("app is terminating");
     await mongoose.connection.close();
-
-    console.log('Mongoose default connection closed');
+    console.log('mongoose default connection closed');
     process.exit(0);
-
 });
