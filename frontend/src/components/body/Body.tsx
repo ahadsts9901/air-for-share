@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { BsTextLeft } from "react-icons/bs";
 import { RxFileText } from "react-icons/rx";
 import { baseUrl } from "../../utils/core";
-import { copyText } from "../../utils/functions";
+import { copyText, extractText, formatFileSize } from "../../utils/functions";
+import { ImCross } from "react-icons/im";
 
 export const Sidebar = ({ isText, setIsText }: any) => {
 
@@ -199,11 +200,43 @@ export const FileInstructions = ({ set_files }: any) => {
     )
 }
 
-export const FilesCont = ({ data_files, location }: any) => {
+export const FilesCont = ({ data_files, location, getFiles }: any) => {
 
     return (
         <>
-            <div className="files-container">files-cont</div>
+            <div className="files-container">
+                {data_files?.map((file: any, i: number) => <SingleFile key={i} file={file} location={location} getFiles={getFiles} />)}
+            </div>
+        </>
+    )
+}
+
+export const SingleFile = ({ file, location, getFiles }: any) => {
+    // filePath
+
+    const removeFile = async () => {
+        if (!file) return
+        if (!file?._id || file?._id?.trim() === "") return
+
+        try {
+            await axios.delete(`${baseUrl}/api/v1/files/${file?._id}?latitude=${location?.latitude}&longitude=${location?.longitude}`, {
+                withCredentials: true
+            })
+            getFiles()
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    return (
+        <>
+            <div className="single-file">
+                <ImCross onClick={removeFile} />
+                <div className="cont">
+                    <p>{extractText(file?.fileData?.filename, 8)}</p>
+                    <h3>{formatFileSize(file?.fileData?.fileSize)}</h3>
+                </div>
+            </div>
         </>
     )
 }
@@ -268,7 +301,7 @@ export const FileSection = ({ location, isText }: any) => {
             <div className="file-section section">
                 <h3>File</h3>
                 <div className="files-cont">
-                    {(files?.length || data_files?.length) ? <FilesCont location={location} data_files={data_files} /> : <FileInstructions files={files} set_files={set_files} />}
+                    {(files?.length || data_files?.length) ? <FilesCont location={location} data_files={data_files} getFiles={getFiles} /> : <FileInstructions files={files} set_files={set_files} />}
                 </div>
             </div>
         </>

@@ -140,4 +140,50 @@
   align-items: flex-start;
   gap: 20px;
   background-color: #ffffff;
+  flex-wrap: wrap;
+}
+.air-body ._main .section .files-cont .files-container .single-file {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #eee;
+  background-color: rgba(24, 23, 23, 0.0470588235);
+  cursor: pointer;
+  position: relative;
+}
+.air-body ._main .section .files-cont .files-container .single-file:hover {
+  background-color: rgba(48, 42, 42, 0.0784313725);
+}
+.air-body ._main .section .files-cont .files-container .single-file svg {
+  cursor: pointer;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  padding: 3.5px;
+  background-color: #537EFF;
+  border-radius: 50px;
+  color: #ffffff;
+  transition: color ease-in-out 0.2s;
+}
+.air-body ._main .section .files-cont .files-container .single-file svg:hover {
+  background-color: #745DFF;
+}
+.air-body ._main .section .files-cont .files-container .single-file .cont {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+.air-body ._main .section .files-cont .files-container .single-file .cont p,
+.air-body ._main .section .files-cont .files-container .single-file .cont h3 {
+  width: 100%;
+  text-align: center;
+  font-size: 0.5em;
+  font-weight: 300;
+  color: #A09B9B;
+}
+.air-body ._main .section .files-cont .files-container .single-file .cont h3 {
+  font-size: 0.5em;
 }/*# sourceMappingURL=Body.css.map */
