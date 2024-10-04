@@ -1,4 +1,5 @@
 export const dataExample = {
+    isText: "boolean",
     textData: {
         text: "string"
     },
