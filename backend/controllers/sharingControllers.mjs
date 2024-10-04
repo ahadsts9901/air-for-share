@@ -2,6 +2,9 @@ import { isValidObjectId } from "mongoose"
 import { sharingModel } from "../models/sharingModel.mjs"
 import { errorMessages } from "../utils/errorMessages.mjs"
 import { removeFileFromPath } from "../utils/functions.mjs"
+import { __dirname } from "../server.mjs"
+import fs from "fs"
+import _path from "path"
 
 // text controllers
 export const sendTextController = async (req, res, next) => {
@@ -347,4 +350,49 @@ export const removeFileController = async (req, res, next) => {
     }
 }
 
-// 03051938181
+export const downloadFilecontroller = async (req, res, next) => {
+
+    const { path, filename } = req?.body
+
+    if (!path || path?.trim() === "") {
+        return res.status(400).send({
+            message: errorMessages?.noPath
+        });
+    }
+
+    if (!filename || filename?.trim() === "") {
+        return res.status(400).send({
+            message: errorMessages?.noFilename
+        });
+    }
+
+    try {
+        const fullPath = _path.resolve(__dirname, path);
+
+        fs.access(fullPath, fs.constants.F_OK, (err) => {
+            if (err) {
+                console.error(`file not found: ${fullPath}`);
+                return res.status(404).send({
+                    message: errorMessages?.fileNotFound
+                });
+            }
+
+            res.download(fullPath, filename, (downloadError) => {
+                if (downloadError) {
+                    console.error(downloadError);
+                    return res.status(500).send({
+                        message: errorMessages?.serverError,
+                        error: downloadError?.message
+                    });
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send({
+            message: errorMessages?.serverError,
+            error: error?.message
+        })
+    }
+}

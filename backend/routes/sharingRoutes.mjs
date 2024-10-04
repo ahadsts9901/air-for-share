@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getFilesController, getTextController, removeFileController, removeTextController, sendFilesController, sendTextController } from "../controllers/sharingControllers.mjs";
+import { downloadFilecontroller, getFilesController, getTextController, removeFileController, removeTextController, sendFilesController, sendTextController } from "../controllers/sharingControllers.mjs";
 import { upload } from "../utils/multer.mjs";
 
 const router = Router()
@@ -11,5 +11,7 @@ router.delete("/text", removeTextController)
 router.get("/files", getFilesController)
 router.post("/files", upload.any(), sendFilesController)
 router.delete("/files/:docId", removeFileController)
+
+router.post("/download", downloadFilecontroller)
 
 export default router

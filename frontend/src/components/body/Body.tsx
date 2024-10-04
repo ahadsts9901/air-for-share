@@ -228,11 +228,27 @@ export const SingleFile = ({ file, location, getFiles }: any) => {
         }
     }
 
+    const downloadFile = async () => {
+        if (!file) return
+        if (!file?.fileData?.filePath || file?.fileData?.filePath?.trim() === "") return
+
+        try {
+            const resp = await axios.post(`${baseUrl}/api/v1/download`,
+                {
+                    path: file?.fileData?.filePath,
+                    filename: file?.fileData?.filename
+                }, { withCredentials: true })
+            console.log("resp", resp)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     return (
         <>
             <div className="single-file">
                 <ImCross onClick={removeFile} />
-                <div className="cont">
+                <div className="cont" onClick={downloadFile}>
                     <p>{extractText(file?.fileData?.filename, 8)}</p>
                     <h3>{formatFileSize(file?.fileData?.fileSize)}</h3>
                     <div><FiDownload /> <span>Click to download</span></div>
