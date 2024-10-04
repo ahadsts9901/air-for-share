@@ -98,7 +98,7 @@ export const getTextController = async (req, res, next) => {
             isText: true,
             location: {
                 $geoWithin: {
-                    $centerSphere: [[longitude, latitude], 100 / 6378.1]
+                    $centerSphere: [[+longitude, +latitude], 100 / 6378.1]
                 }
             }
         }).sort({ _id: -1 })

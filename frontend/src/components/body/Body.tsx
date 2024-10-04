@@ -41,6 +41,9 @@ export const TextSection = ({ location }: any) => {
     const [text, set_text] = useState("")
     const [button_content, set_button_content] = useState("Save")
     const [is_typed, set_is_typed] = useState(false)
+    const [data, set_data] = useState<any>(null)
+
+    console.log("data", data)
 
     useEffect(() => {
         if (!text || text?.trim() === "" || is_typed) {
@@ -49,6 +52,27 @@ export const TextSection = ({ location }: any) => {
             set_button_content("Copy")
         }
     }, [text])
+
+    useEffect(() => {
+        getText()
+    }, [location])
+
+    const getText = async () => {
+        if (!location) return
+        if (!location?.latitude) return
+        if (!location?.longitude) return
+
+        try {
+            const resp = await axios.get(`${baseUrl}/api/v1/text?latitude=${location?.latitude}&longitude=${location?.longitude}`, {
+                withCredentials: true
+            })
+            set_button_content("Copy")
+            set_data(resp?.data?.data)
+            set_text(resp?.data?.data?.textData?.text)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     const clear = () => {
         console.log("clear");
@@ -70,8 +94,8 @@ export const TextSection = ({ location }: any) => {
                 latitude: location?.latitude,
                 longitude: location?.longitude,
             }, { withCredentials: true })
-            set_button_content("Copy")
             set_is_typed(false)
+            set_button_content("Copy")
         } catch (error) {
             console.error(error)
         }
