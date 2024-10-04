@@ -1,6 +1,7 @@
 import { isValidObjectId } from "mongoose"
 import { sharingModel } from "../models/sharingModel.mjs"
 import { errorMessages } from "../utils/errorMessages.mjs"
+import { removeFileFromPath } from "../utils/functions.mjs"
 
 // text controllers
 export const sendTextController = async (req, res, next) => {
@@ -279,7 +280,7 @@ export const getFilesController = async (req, res, next) => {
 
 export const removeFileController = async (req, res, next) => {
 
-    const { latitude, longitude } = req?.query;
+    const { latitude, longitude, path } = req?.query;
     const { docId } = req?.params
 
     if (!latitude) {
@@ -291,6 +292,12 @@ export const removeFileController = async (req, res, next) => {
     if (!longitude) {
         return res.status(400).send({
             message: errorMessages?.noLongitude
+        });
+    }
+
+    if (!path || path?.trim() === "") {
+        return res.status(400).send({
+            message: errorMessages?.noPath
         });
     }
 
@@ -307,10 +314,9 @@ export const removeFileController = async (req, res, next) => {
     }
 
     try {
-
         const doc = await sharingModel.findOne({
             _id: docId,
-            isText: true,
+            isText: false,
             location: {
                 $geoWithin: {
                     $centerSphere: [[+longitude, +latitude], 100 / 6378.1]
@@ -323,6 +329,8 @@ export const removeFileController = async (req, res, next) => {
                 message: errorMessages?.unAuthError
             })
         }
+
+        await removeFileFromPath(doc?.fileData?.filePath)
 
         const deleteResp = await sharingModel.findByIdAndDelete(docId)
 

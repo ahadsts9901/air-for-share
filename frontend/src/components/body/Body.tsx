@@ -219,7 +219,8 @@ export const SingleFile = ({ file, location, getFiles }: any) => {
         if (!file?._id || file?._id?.trim() === "") return
 
         try {
-            await axios.delete(`${baseUrl}/api/v1/files/${file?._id}?latitude=${location?.latitude}&longitude=${location?.longitude}`, {
+            const query = `?latitude=${location?.latitude}&longitude=${location?.longitude}&path=${file?.fileData?.filePath}`
+            await axios.delete(`${baseUrl}/api/v1/files/${file?._id}${query}`, {
                 withCredentials: true
             })
             getFiles()

@@ -21,4 +21,5 @@ export const errorMessages = {
     filesReqiured: "files are reqiured",
     idIsReqiured: "id is required",
     idInvalid: "id is invalid",
+    noPath: "path is required",
 }

@@ -7,8 +7,10 @@ import cors from "cors"
 import { createServer } from "http"
 import { Server as socketIo } from "socket.io"
 import { allowedOrigins, globalIoObject } from "./utils/core.mjs"
+import path from "path"
 
 import sharingRoutes from "./routes/sharingRoutes.mjs"
+export const __dirname = path.resolve()
 
 const app = express()
 
