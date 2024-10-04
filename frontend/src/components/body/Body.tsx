@@ -37,7 +37,7 @@ export const Sidebar = ({ isText, setIsText }: any) => {
 
 }
 
-export const TextSection = ({ location }: any) => {
+export const TextSection = ({ location, isText }: any) => {
 
     const [text, set_text] = useState("")
     const [button_content, set_button_content] = useState("Save")
@@ -55,9 +55,10 @@ export const TextSection = ({ location }: any) => {
     }, [text])
 
     useEffect(() => {
+        if (!isText) return
         if (!is_typed) getText()
         saveText()
-    }, [location])
+    }, [location, isText])
 
     const getText = async () => {
         if (!location) return
@@ -198,17 +199,26 @@ export const FileInstructions = ({ set_files }: any) => {
     )
 }
 
-export const FilesCont = ({ location, files, set_files }: any) => {
+export const FilesCont = ({ data_files, location }: any) => {
 
+    return (
+        <>
+            <div className="files-container">files-cont</div>
+        </>
+    )
+}
+
+export const FileSection = ({ location, isText }: any) => {
+
+    const [files, set_files] = useState<any>(null)
     const [data_files, set_data_files] = useState<any[]>([])
+    const [is_added, set_is_added] = useState(false)
 
     useEffect(() => {
-        // getFiles()
-    }, [])
-
-    useEffect(() => {
+        if (isText) return
+        if (!is_added) getFiles()
         sendFiles()
-    }, [files])
+    }, [location, files, isText])
 
     const getFiles = async () => {
         if (!location) return
@@ -219,6 +229,8 @@ export const FilesCont = ({ location, files, set_files }: any) => {
             const resp = await axios.get(`${baseUrl}/api/v1/files?latitude=${location?.latitude}&longitude=${location?.longitude}`, {
                 withCredentials: true
             })
+            set_data_files(resp?.data?.data)
+            set_is_added(false)
         } catch (error) {
             console.error(error)
         }
@@ -238,12 +250,14 @@ export const FilesCont = ({ location, files, set_files }: any) => {
             formData.append("latitude", location?.latitude)
             formData.append("longitude", location?.longitude)
 
-            const resp = await axios.post(`${baseUrl}/api/v1/files`, formData, {
+            await axios.post(`${baseUrl}/api/v1/files`, formData, {
                 withCredentials: true,
                 headers: { "Content-Type": "multipart/form-data" }
             })
 
-            console.log("resp", resp?.data)
+            set_is_added(true)
+            set_files(null)
+            getFiles()
         } catch (error) {
             console.error(error)
         }
@@ -251,21 +265,10 @@ export const FilesCont = ({ location, files, set_files }: any) => {
 
     return (
         <>
-            <div className="files-container">files-cont</div>
-        </>
-    )
-}
-
-export const FileSection = ({ location }: any) => {
-
-    const [files, set_files] = useState<any>(null)
-
-    return (
-        <>
             <div className="file-section section">
                 <h3>File</h3>
                 <div className="files-cont">
-                    {files?.length ? <FilesCont files={files} set_files={set_files} location={location} /> : <FileInstructions files={files} set_files={set_files} />}
+                    {(files?.length || data_files?.length) ? <FilesCont location={location} data_files={data_files} /> : <FileInstructions files={files} set_files={set_files} />}
                 </div>
             </div>
         </>
@@ -299,7 +302,7 @@ export const Main = ({ isText }: any) => {
     return (
         <>
             <div className="_main">
-                {isText ? <TextSection location={location} /> : <FileSection location={location} />}
+                {isText ? <TextSection location={location} isText={isText} /> : <FileSection location={location} isText={isText} />}
             </div>
         </>
     )
