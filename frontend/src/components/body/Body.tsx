@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { BsTextLeft } from "react-icons/bs";
 import { RxFileText } from "react-icons/rx";
 import { baseUrl } from "../../utils/core";
+import { copyText } from "../../utils/functions";
 
 export const Sidebar = ({ isText, setIsText }: any) => {
 
@@ -47,14 +48,15 @@ export const TextSection = ({ location }: any) => {
 
     useEffect(() => {
         if (!text || text?.trim() === "" || is_typed) {
-            set_button_content("Save")
+            removeText()
         } else {
             set_button_content("Copy")
         }
     }, [text])
 
     useEffect(() => {
-        getText()
+        if (!is_typed) getText()
+        saveText()
     }, [location])
 
     const getText = async () => {
@@ -79,7 +81,16 @@ export const TextSection = ({ location }: any) => {
     }
 
     const handleClick = () => {
-        if (button_content === "Save") saveText()
+        switch (button_content) {
+            case "Save":
+                saveText()
+                break;
+            case "Copy":
+                copyText(text)
+                break;
+            default:
+                break;
+        }
     }
 
     const saveText = async () => {
@@ -96,6 +107,15 @@ export const TextSection = ({ location }: any) => {
             }, { withCredentials: true })
             set_is_typed(false)
             set_button_content("Copy")
+            getText()
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const removeText = async () => {
+        try {
+            set_button_content("Save")
         } catch (error) {
             console.error(error)
         }
