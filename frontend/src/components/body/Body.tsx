@@ -76,7 +76,9 @@ export const TextSection = ({ location }: any) => {
     }
 
     const clear = () => {
-        console.log("clear");
+        removeText()
+        set_text("")
+        set_button_content("Save")
     }
 
     const handleClick = () => {
@@ -201,8 +203,12 @@ export const FilesCont = ({ location, files, set_files }: any) => {
     const [data_files, set_data_files] = useState<any[]>([])
 
     useEffect(() => {
-        getFiles()
+        // getFiles()
     }, [])
+
+    useEffect(() => {
+        sendFiles()
+    }, [files])
 
     const getFiles = async () => {
         if (!location) return
@@ -213,6 +219,31 @@ export const FilesCont = ({ location, files, set_files }: any) => {
             const resp = await axios.get(`${baseUrl}/api/v1/files?latitude=${location?.latitude}&longitude=${location?.longitude}`, {
                 withCredentials: true
             })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const sendFiles = async () => {
+        if (!files) return
+        if (!files?.length) return
+        if (!files?.[0]) return
+        if (!location) return
+        if (!location?.latitude) return
+        if (!location?.longitude) return
+
+        try {
+            const formData = new FormData()
+            for (let i = 0; i < files?.length; i++) { formData.append("files", files[i]) }
+            formData.append("latitude", location?.latitude)
+            formData.append("longitude", location?.longitude)
+
+            const resp = await axios.post(`${baseUrl}/api/v1/files`, formData, {
+                withCredentials: true,
+                headers: { "Content-Type": "multipart/form-data" }
+            })
+
+            console.log("resp", resp?.data)
         } catch (error) {
             console.error(error)
         }

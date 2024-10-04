@@ -163,22 +163,6 @@ export const removeTextController = async (req, res, next) => {
 // file controllers
 export const sendFilesController = async (req, res, next) => {
 
-    // {
-    //     isText: "boolean",
-    //         textData: {
-    //         text: "string"
-    //     },
-    //     fileData: {
-    //         filePath: "string",
-    //             filename: "string",
-    //                 fileSize: "number"
-    //     },
-    //     location: {
-    //         latitude: "number",
-    //             longitude: "number"
-    //     }
-    // }
-
     const { latitude, longitude } = req?.body
     const { files } = req
 
@@ -213,18 +197,25 @@ export const sendFilesController = async (req, res, next) => {
     }
 
     try {
+        const payload = files?.map((file) => {
+            return {
+                isText: false,
+                textData: { text: null },
+                fileData: {
+                    filePath: file?.path,
+                    filename: file?.originalname,
+                    fileSize: file?.size
+                },
+                location: {
+                    type: "Point",
+                    coordinates: [parseFloat(longitude), parseFloat(latitude)],
+                },
+            }
+        })
 
-        // const payload = {
-        //     isText: false,
-        //     textData: { text: null },
-        //     fileData: { filePath: null, filename: null, fileSize: null },
-        //     location: {
-        //         type: "Point",
-        //         coordinates: [parseFloat(longitude), parseFloat(latitude)],
-        //     },
-        // };
+        const resp = await sharingModel.create(payload)
 
-        // const resp = await sharingModel.create(payload)
+        console.log("payload", payload)
 
         return res.send({
             message: errorMessages?.fileSaved
@@ -347,3 +338,5 @@ export const removeFileController = async (req, res, next) => {
         })
     }
 }
+
+// 03051938181
