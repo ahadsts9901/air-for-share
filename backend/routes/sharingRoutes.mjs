@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getFilesController } from "../controllers/sharingControllers.mjs";
+import { sendTextController } from "../controllers/sharingControllers.mjs";
 
 const router = Router()
 
-router.get("/files", getFilesController)
+router.post("/text", sendTextController)
 
 export default router
