@@ -1,5 +1,5 @@
 import "./Body.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsTextLeft } from "react-icons/bs";
 import { RxFileText } from "react-icons/rx";
 
@@ -34,7 +34,7 @@ export const Sidebar = ({ isText, setIsText }: any) => {
 
 }
 
-export const TextSection = () => {
+export const TextSection = ({ location }: any) => {
 
     const [text, set_text] = useState("")
     const [button_content, set_button_content] = useState("Save")
@@ -117,7 +117,7 @@ export const FileInstructions = ({ set_files }: any) => {
     )
 }
 
-export const FileSection = () => {
+export const FileSection = ({ location }: any) => {
 
     const [files, set_files] = useState<any>(null)
 
@@ -135,10 +135,32 @@ export const FileSection = () => {
 
 export const Main = ({ isText }: any) => {
 
+    const [location, set_location] = useState<any>(null)
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            getCurrentLocation();
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const getCurrentLocation = () => {
+        if (navigator?.geolocation) {
+            navigator.geolocation.getCurrentPosition
+                (
+                    (position) => { set_location({ latitude: position.coords.latitude, longitude: position.coords.longitude }) },
+                    (error) => { console.error(error) }
+                );
+        } else {
+            console.log("geolocation is not supported by this browser.");
+        }
+    };
+
     return (
         <>
             <div className="_main">
-                {isText ? <TextSection /> : <FileSection />}
+                {isText ? <TextSection location={location} /> : <FileSection location={location} />}
             </div>
         </>
     )
