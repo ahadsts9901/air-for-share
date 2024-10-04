@@ -6,6 +6,7 @@ import { RxFileText } from "react-icons/rx";
 import { baseUrl } from "../../utils/core";
 import { copyText, extractText, formatFileSize } from "../../utils/functions";
 import { ImCross } from "react-icons/im";
+import { FiDownload } from "react-icons/fi";
 
 export const Sidebar = ({ isText, setIsText }: any) => {
 
@@ -212,8 +213,6 @@ export const FilesCont = ({ data_files, location, getFiles }: any) => {
 }
 
 export const SingleFile = ({ file, location, getFiles }: any) => {
-    // filePath
-
     const removeFile = async () => {
         if (!file) return
         if (!file?._id || file?._id?.trim() === "") return
@@ -236,6 +235,7 @@ export const SingleFile = ({ file, location, getFiles }: any) => {
                 <div className="cont">
                     <p>{extractText(file?.fileData?.filename, 8)}</p>
                     <h3>{formatFileSize(file?.fileData?.fileSize)}</h3>
+                    <div><FiDownload /> <span>Click to download</span></div>
                 </div>
             </div>
         </>

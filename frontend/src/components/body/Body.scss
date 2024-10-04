@@ -179,8 +179,17 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
                         cursor: pointer;
                         position: relative;
 
-                        &:hover{
+                        &:hover {
                             background-color: $hoveredFile;
+
+                            .cont p,
+                            h3 {
+                                display: none;
+                            }
+
+                            .cont div {
+                                display: flex;
+                            }
                         }
 
                         svg {
@@ -196,6 +205,15 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
 
                             &:hover {
                                 background-color: $purpleText;
+
+                                +.cont p,
+                                +.cont h3 {
+                                    display: block;
+                                }
+
+                                +.cont div {
+                                    display: none;
+                                }
                             }
                         }
 
@@ -219,6 +237,25 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
 
                             h3 {
                                 font-size: 0.5em;
+                            }
+
+                            div {
+                                width: 100%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                gap: 4px;
+                                display: none;
+
+                                svg,
+                                span {
+                                    color: $textColor;
+                                    font-size: 0.5em;
+                                    position: static;
+                                    background-color: transparent;
+                                    border-radius: 0;
+                                    padding: 0;
+                                }
                             }
                         }
                     }
