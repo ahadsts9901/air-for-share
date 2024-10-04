@@ -42,9 +42,6 @@ export const TextSection = ({ location }: any) => {
     const [text, set_text] = useState("")
     const [button_content, set_button_content] = useState("Save")
     const [is_typed, set_is_typed] = useState(false)
-    const [data, set_data] = useState<any>(null)
-
-    console.log("data", data)
 
     useEffect(() => {
 
@@ -72,7 +69,6 @@ export const TextSection = ({ location }: any) => {
                 withCredentials: true
             })
             set_button_content("Copy")
-            set_data(resp?.data?.data)
             set_text(resp?.data?.data?.textData?.text)
         } catch (error) {
             console.error(error)
@@ -122,8 +118,8 @@ export const TextSection = ({ location }: any) => {
         if (!location?.longitude) return
 
         try {
-            const resp = await axios.delete(`${baseUrl}/api/v1/text?latitude=${location?.latitude}&longitude=${location?.longitude}`, { withCredentials: true })
-            console.log(resp)
+            await axios.delete(`${baseUrl}/api/v1/text?latitude=${location?.latitude}&longitude=${location?.longitude}`, { withCredentials: true })
+            set_button_content("Save")
         } catch (error) {
             console.error(error)
         }
@@ -203,7 +199,6 @@ export const FileInstructions = ({ set_files }: any) => {
 export const FileSection = ({ location }: any) => {
 
     const [files, set_files] = useState<any>(null)
-    console.log(location)
 
     return (
         <>
@@ -237,7 +232,7 @@ export const Main = ({ isText }: any) => {
                     (error) => { console.error(error) }
                 );
         } else {
-            console.log("geolocation is not supported by this browser.");
+            console.error("geolocation is not supported by this browser.");
         }
     };
 
