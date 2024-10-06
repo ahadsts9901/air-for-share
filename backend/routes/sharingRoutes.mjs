@@ -12,6 +12,6 @@ router.get("/files", getFilesController)
 router.post("/files", upload.any(), sendFilesController)
 router.delete("/files/:docId", removeFileController)
 
-router.post("/download", downloadFilecontroller)
+router.get("/download", downloadFilecontroller)
 
 export default router

@@ -352,7 +352,7 @@ export const removeFileController = async (req, res, next) => {
 
 export const downloadFilecontroller = async (req, res, next) => {
 
-    const { path, filename } = req?.body
+    const { path, filename } = req?.query
 
     if (!path || path?.trim() === "") {
         return res.status(400).send({
@@ -369,24 +369,22 @@ export const downloadFilecontroller = async (req, res, next) => {
     try {
         const fullPath = _path.resolve(__dirname, path);
 
-        fs.access(fullPath, fs.constants.F_OK, (err) => {
-            if (err) {
-                console.error(`file not found: ${fullPath}`);
-                return res.status(404).send({
-                    message: errorMessages?.fileNotFound
-                });
-            }
-
-            res.download(fullPath, filename, (downloadError) => {
-                if (downloadError) {
-                    console.error(downloadError);
-                    return res.status(500).send({
-                        message: errorMessages?.serverError,
-                        error: downloadError?.message
-                    });
-                }
+        if (!fs.existsSync(fullPath)) {
+            return res.status(404).send({
+                message: 'file not found'
             });
-        });
+        }
+
+        const fileData = fs.readFileSync(fullPath);
+        const base64File = fileData.toString('base64');
+
+        res.send({
+            message: errorMessages?.filesFetched,
+            data: {
+                base64: base64File,
+                filename: filename
+            }
+        })
 
     } catch (error) {
         console.error(error)

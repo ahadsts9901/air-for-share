@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { BsTextLeft } from "react-icons/bs";
 import { RxFileText } from "react-icons/rx";
 import { baseUrl } from "../../utils/core";
-import { copyText, extractText, formatFileSize } from "../../utils/functions";
+import { base64ToBlob, copyText, extractText, formatFileSize } from "../../utils/functions";
 import { ImCross } from "react-icons/im";
 import { FiDownload } from "react-icons/fi";
 
@@ -233,12 +233,16 @@ export const SingleFile = ({ file, location, getFiles }: any) => {
         if (!file?.fileData?.filePath || file?.fileData?.filePath?.trim() === "") return
 
         try {
-            const resp = await axios.post(`${baseUrl}/api/v1/download`,
-                {
-                    path: file?.fileData?.filePath,
-                    filename: file?.fileData?.filename
-                }, { withCredentials: true })
-            console.log("resp", resp)
+            const resp = await axios.get(`${baseUrl}/api/v1/download?path=${file?.fileData?.filePath}&filename=${file?.fileData?.filename}`,
+                { withCredentials: true })
+            const { base64, filename } = resp?.data?.data
+            const blob = base64ToBlob(base64)
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         } catch (error) {
             console.error(error)
         }
