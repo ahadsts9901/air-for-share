@@ -47,4 +47,10 @@ $black: #343434;
         }
     }
 
+    @media (max-width: 1024px) {
+        ul {
+            display: none;
+        }
+    }
+
 }

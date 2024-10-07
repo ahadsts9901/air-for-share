@@ -37,4 +37,9 @@
 }
 .header ul .login-register:hover {
   color: #745DFF;
+}
+@media (max-width: 1024px) {
+  .header ul {
+    display: none;
+  }
 }/*# sourceMappingURL=Header.css.map */
