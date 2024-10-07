@@ -3,10 +3,11 @@ import "./Body.css";
 import { useEffect, useState } from "react";
 import { BsTextLeft } from "react-icons/bs";
 import { RxFileText } from "react-icons/rx";
-import { baseUrl } from "../../utils/core";
+import { _1gbSize, baseUrl } from "../../utils/core";
 import { base64ToBlob, copyText, extractText, formatFileSize } from "../../utils/functions";
 import { ImCross } from "react-icons/im";
 import { FiDownload } from "react-icons/fi";
+import { errorMessages } from "../../utils/errorMessages";
 
 export const Sidebar = ({ isText, setIsText }: any) => {
 
@@ -174,8 +175,8 @@ export const FileInstructions = ({ set_files }: any) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(false);
-        const files = e.dataTransfer.files;
-        if (files.length) {
+        const files = e?.dataTransfer?.files;
+        if (files?.length) {
             set_files(files);
         }
     };
@@ -196,7 +197,7 @@ export const FileInstructions = ({ set_files }: any) => {
                     multiple
                     onChange={(e: any) => set_files(e?.target?.files)}
                 />
-                <p>Drag and drop any files, or <label htmlFor="files-sts">Browse</label></p>
+                <p>Drag and drop any files, or <label htmlFor="files-sts">browse</label>. The total size of all files must not exceed 1 GB.</p>
             </div>
         </>
     )
@@ -314,6 +315,27 @@ export const FileSection = ({ location, isText }: any) => {
         if (!location?.latitude) return
         if (!location?.longitude) return
 
+        let totalFileSize = 0;
+        let sizeExceeded = false;
+
+        for (let i = 0; i < files?.length; i++) {
+            totalFileSize += files[i]?.size
+            if (files[i].size > _1gbSize) {
+                sizeExceeded = true
+                break
+            }
+        }
+
+        if (sizeExceeded) {
+            alert(errorMessages?.oneFileSizeExceeds)
+            return
+        }
+
+        if (totalFileSize > _1gbSize) {
+            alert(errorMessages?.multipleFilesSizeExceeds)
+            return
+        }
+
         try {
             const formData = new FormData()
             for (let i = 0; i < files?.length; i++) { formData.append("files", files[i]) }
@@ -328,8 +350,12 @@ export const FileSection = ({ location, isText }: any) => {
             set_is_added(true)
             set_files(null)
             getFiles()
-        } catch (error) {
+        } catch (error: any) {
             console.error(error)
+            if (error.response.status == 403) {
+                alert(errorMessages?.multipleFilesSizeExceeds)
+                return
+            }
         }
     }
 

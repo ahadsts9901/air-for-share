@@ -154,6 +154,8 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
                     p {
                         color: $textColor;
                         font-weight: 300;
+                        width: 100%;
+                        text-align: center;
 
                         label {
                             color: $purpleText;
@@ -347,8 +349,9 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
                 display: none;
             }
         }
-        ._main{
-            .section{
+
+        ._main {
+            .section {
                 padding: 20px;
             }
         }

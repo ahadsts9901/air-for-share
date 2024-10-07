@@ -6,6 +6,7 @@ import { removeFileFromPath } from "../utils/functions.mjs"
 import { __dirname } from "../server.mjs"
 import fs from "fs"
 import _path from "path"
+import { _1gbSize } from "../utils/core.mjs"
 
 // text controllers
 export const sendTextController = async (req, res, next) => {
@@ -202,6 +203,15 @@ export const sendFilesController = async (req, res, next) => {
     }
 
     try {
+
+        const totalFileSize = files.reduce((sum, file) => sum + file.size, 0)
+
+        if (totalFileSize > _1gbSize) {
+            return res.status(403).send({
+                message: errorMessages?.fileSizeExceeded
+            })
+        }
+
         const payload = files?.map((file) => {
             return {
                 isText: false,
@@ -219,8 +229,6 @@ export const sendFilesController = async (req, res, next) => {
         })
 
         const resp = await sharingModel.create(payload)
-
-        console.log("payload", payload)
 
         return res.send({
             message: errorMessages?.fileSaved
@@ -400,7 +408,7 @@ export const autoDeleteFilesController = async (req, res, next) => {
     try {
         const fiveMinutesAgo = moment().subtract(5, 'minutes').toDate();
         const query = { createdOn: { $lt: fiveMinutesAgo }, isText: false };
-        
+
         const allFiles = await sharingModel.find(query).select("fileData");
 
         await Promise.all(allFiles.map(async (file) => {

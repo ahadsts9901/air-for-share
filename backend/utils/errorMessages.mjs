@@ -24,5 +24,6 @@ export const errorMessages = {
     noPath: "path is required",
     noFilename: "filename is required",
     fileNotFound: "file not found",
-    filesDeleted: "old files deleted"
+    filesDeleted: "old files deleted",
+    fileSizeExceeded: "total size of all files must not exceed 1 GB"
 }
