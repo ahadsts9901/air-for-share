@@ -262,11 +262,22 @@ export const SingleFile = ({ file, location, getFiles }: any) => {
     )
 }
 
+export const Loading = () => {
+    return (
+        <>
+            <div className="loading-cont">
+                <div className="loader"></div>
+            </div>
+        </>
+    )
+}
+
 export const FileSection = ({ location, isText }: any) => {
 
     const [files, set_files] = useState<any>(null)
     const [data_files, set_data_files] = useState<any[]>([])
     const [is_added, set_is_added] = useState(false)
+    const [is_loading, set_is_loading] = useState(false)
 
     useEffect(() => {
         if (isText) return
@@ -280,13 +291,17 @@ export const FileSection = ({ location, isText }: any) => {
         if (!location?.longitude) return
 
         try {
+            set_is_loading(true)
             const resp = await axios.get(`${baseUrl}/api/v1/files?latitude=${location?.latitude}&longitude=${location?.longitude}`, {
                 withCredentials: true
             })
             set_data_files(resp?.data?.data)
             set_is_added(false)
+            set_is_loading(false)
+            set_is_loading(false)
         } catch (error) {
             console.error(error)
+            set_is_loading(false)
         }
     }
 
@@ -322,7 +337,10 @@ export const FileSection = ({ location, isText }: any) => {
             <div className="file-section section">
                 <h3>File</h3>
                 <div className="files-cont">
-                    {(files?.length || data_files?.length) ? <FilesCont location={location} data_files={data_files} getFiles={getFiles} /> : <FileInstructions files={files} set_files={set_files} />}
+                    {
+                        is_loading ? <Loading /> :
+                            (files?.length || data_files?.length) ? <FilesCont location={location} data_files={data_files} getFiles={getFiles} /> : <FileInstructions files={files} set_files={set_files} />
+                    }
                 </div>
             </div>
         </>

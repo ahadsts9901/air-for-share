@@ -1,4 +1,5 @@
 import { isValidObjectId } from "mongoose"
+import moment from "moment"
 import { sharingModel } from "../models/sharingModel.mjs"
 import { errorMessages } from "../utils/errorMessages.mjs"
 import { removeFileFromPath } from "../utils/functions.mjs"
@@ -394,3 +395,29 @@ export const downloadFilecontroller = async (req, res, next) => {
         })
     }
 }
+
+export const autoDeleteFilesController = async (req, res, next) => {
+    try {
+        const fiveMinutesAgo = moment().subtract(5, 'minutes').toDate();
+        const query = { createdOn: { $lt: fiveMinutesAgo }, isText: false };
+        
+        const allFiles = await sharingModel.find(query).select("fileData");
+
+        await Promise.all(allFiles.map(async (file) => {
+            await removeFileFromPath(file?.fileData?.filePath);
+        }));
+
+        await sharingModel.deleteMany(query);
+
+        res.send({
+            message: errorMessages?.filesDeleted
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({
+            message: errorMessages?.serverError,
+            error: error?.message
+        });
+    }
+};

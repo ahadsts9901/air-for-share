@@ -217,4 +217,13 @@
   background-color: transparent;
   border-radius: 0;
   padding: 0;
+}
+.air-body ._main .section .files-cont .loading-cont {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }/*# sourceMappingURL=Body.css.map */
