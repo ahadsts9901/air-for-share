@@ -1,3 +1,2 @@
-responsive
 2gb validation
 build

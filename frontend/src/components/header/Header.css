@@ -39,6 +39,9 @@
   color: #745DFF;
 }
 @media (max-width: 1024px) {
+  .header {
+    width: 90%;
+  }
   .header ul {
     display: none;
   }

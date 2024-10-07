@@ -33,4 +33,12 @@
 }
 .footer .social-links a:hover {
   color: #343434;
+}
+@media (max-width: 1024px) {
+  .footer {
+    width: 90%;
+  }
+  .footer .social-links {
+    gap: 1em;
+  }
 }/*# sourceMappingURL=Footer.css.map */

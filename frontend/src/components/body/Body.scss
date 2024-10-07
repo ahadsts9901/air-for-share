@@ -27,6 +27,10 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
         height: 100%;
         background-color: $bodyColor;
 
+        h3 {
+            display: none;
+        }
+
         li {
             list-style-type: none;
             cursor: pointer;
@@ -275,5 +279,78 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
 
         }
 
+    }
+
+    @media (max-width:1024px) {
+        flex-direction: column;
+        width: 90%;
+
+        ul.sidebar {
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            h3 {
+                display: block;
+                margin-right: auto;
+                margin-left: 40px;
+                width: 100%;
+                text-align: left;
+                font-size: 2em;
+                font-weight: normal;
+                color: $black;
+            }
+
+            li {
+                display: inline-block;
+            }
+        }
+
+        ._main {
+            .section {
+                h3 {
+                    display: none;
+                }
+
+                .buttons-cont {
+                    gap: 20px;
+
+                    button {
+                        padding: 0.5em 2em;
+                    }
+
+                }
+            }
+        }
+    }
+
+    @media (max-width:420px) {
+        ._main {
+            .section {
+                .buttons-cont {
+                    gap: 20px;
+
+                    button {
+                        padding: 0.5em 1em;
+                    }
+
+                }
+            }
+        }
+    }
+
+    @media (max-width:350px) {
+        ul.sidebar {
+            h3 {
+                display: none;
+            }
+        }
+        ._main{
+            .section{
+                padding: 20px;
+            }
+        }
     }
 }

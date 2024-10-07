@@ -24,6 +24,7 @@ export const Sidebar = ({ isText, setIsText }: any) => {
     return (
         <>
             <ul className="sidebar">
+                <h3>{isText ? "Text" : "File"}</h3>
                 {sidebarOptions.map((opt, i) => (
                     <li
                         key={i}
