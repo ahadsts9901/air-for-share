@@ -203,12 +203,61 @@ export const FileInstructions = ({ set_files }: any) => {
     )
 }
 
-export const FilesCont = ({ data_files, location, getFiles }: any) => {
+export const FilesCont = ({ data_files, location, getFiles, set_files }: any) => {
+
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleDragEnter = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        const files = e?.dataTransfer?.files;
+        if (files?.length) {
+            set_files(files);
+        }
+    };
 
     return (
         <>
-            <div className="files-container">
+            <div
+                className={`files-container fileInstructions ${isDragging ? "dragging" : ""}`}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+            >
                 {data_files?.map((file: any, i: number) => <SingleFile key={i} file={file} location={location} getFiles={getFiles} />)}
+                <label htmlFor="files-sts-second" className="single-file single-file-special">
+                    <p>Add more</p>
+                </label>
+                <input
+                    type="file"
+                    id="files-sts-second"
+                    hidden
+                    multiple
+                    onChange={(e: any) => {
+                        set_files([...e?.target?.files, ...data_files])
+                        e.target.value = ""
+                    }}
+                />
             </div>
         </>
     )
@@ -366,7 +415,7 @@ export const FileSection = ({ location, isText }: any) => {
                 <div className="files-cont">
                     {
                         is_loading ? <Loading /> :
-                            (files?.length || data_files?.length) ? <FilesCont location={location} data_files={data_files} getFiles={getFiles} /> : <FileInstructions files={files} set_files={set_files} />
+                            (files?.length || data_files?.length) ? <FilesCont location={location} data_files={data_files} getFiles={getFiles} set_files={set_files} /> : <FileInstructions files={files} set_files={set_files} />
                     }
                 </div>
             </div>

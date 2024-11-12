@@ -140,7 +140,7 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
 
             .files-cont {
                 width: 100%;
-                height: 100%;
+                height: calc(100% - 70px);
                 border: 2px dashed $fileBorderColor;
 
                 .fileInstructions {
@@ -176,6 +176,7 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
                     gap: 20px;
                     background-color: $white;
                     flex-wrap: wrap;
+                    overflow-y: auto;
 
                     .single-file {
                         width: 100px;
@@ -265,6 +266,25 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
                             }
                         }
                     }
+
+                    .single-file-special {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        &:hover {
+                            p {
+                                color: $purpleText;
+                            }
+                        }
+
+                        p {
+                            color: $blueText;
+                            font-size: 0.8em;
+                            font-weight: bold;
+                            transition: color ease-in-out 0.2s;
+                        }
+                    }
                 }
 
                 .loading-cont {
@@ -325,6 +345,10 @@ $gradient: linear-gradient(0deg, $blueText 25%, $purpleText 75%);
 
                 }
             }
+        }
+
+        .files-cont {
+            height: 100%!important;
         }
     }
 
